@@ -1,0 +1,19 @@
+{
+  "name": "system-health-checker",
+  "version": "1.0.0",
+  "description": "Cross-platform system health checker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.2.1"
+  },
+  "dependencies": {
+    "electron-sudo": "^4.0.12",
+    "systeminformation": "^5.27.7"
+  }
+}

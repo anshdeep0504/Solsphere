@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Health Dashboard</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+  h1 { color: #333; }
+  ul { list-style-type: none; padding: 0; }
+  li { margin: 10px 0; font-size: 1.1em; }
+  span { font-weight: bold; color: #555; }
+</style>
+</head>
+<body>
+  <h1>System Health Dashboard</h1>
+  <ul>
+    <li>Disk Type (Proxy for Encryption): <span id="disk">Loading...</span></li>
+    <li>OS Version: <span id="os">Loading...</span></li>
+    <li>CPU: <span id="cpu">Loading...</span></li>
+    <li>RAM: <span id="ram">Loading...</span></li>
+    <li>Antivirus: <span id="av">Loading...</span></li>
+    <li>Sleep Settings: <span id="sleep">Loading...</span></li>
+  </ul>
+
+  <script>
+    async function loadInfo() {
+      alert('loadInfo() called');
+      console.log('loadInfo() called');
+      try {
+        console.log('Before window.systemAPI.getSystemInfo()');
+        const info = await window.systemAPI.getSystemInfo();
+        console.log('After window.systemAPI.getSystemInfo()', info);
+        document.getElementById('disk').innerText = info.diskEncryption;
+        document.getElementById('os').innerText = info.osVersion;
+        document.getElementById('cpu').innerText = info.cpu;
+        document.getElementById('ram').innerText = info.ram;
+        document.getElementById('av').innerText = info.antivirus;
+        document.getElementById('sleep').innerText = info.sleep;
+      } catch (err) {
+        console.error('Renderer Error:', err);
+        document.getElementById('disk').innerText = 'Unknown';
+        document.getElementById('os').innerText = 'Unknown';
+        document.getElementById('cpu').innerText = 'Unknown';
+        document.getElementById('ram').innerText = 'Unknown';
+        document.getElementById('av').innerText = 'Unknown';
+        document.getElementById('sleep').innerText = 'Unknown';
+      }
+      console.log('loadInfo() finished');
+    }
+
+    loadInfo();
+  </script>
+</body>
+</html>
