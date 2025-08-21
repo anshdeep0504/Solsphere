@@ -3,17 +3,69 @@
   "version": "1.0.0",
   "description": "Cross-platform system health checker",
   "main": "main.js",
+  "build": {
+    "appId": "com.example.systemhealthchecker",
+    "productName": "System Health Checker",
+    "copyright": "Copyright © 2025 ${author}",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.ts",
+      "index.html",
+      "dist/",
+      "node_modules/"
+    ],
+    "mac": {
+      "icon": "assets/icons/mac/icon.icns",
+      "artifactName": "${productName}.${ext}",
+      "target": "dmg"
+    },
+    "win": {
+      "icon": "assets/icons/win/icon.ico",
+      "target": "nsis",
+      "artifactName": "${productName}.${ext}"
+    },
+    "linux": {
+      "icon": "assets/icons/png/icon.png",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "artifactName": "${productName}.${ext}"
+    },
+    "publish": null
+  },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "electron .",
+    "dist": "electron-builder --win --mac --linux",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^28.2.1"
+    "autoprefixer": "^10.4.21",
+    "electron": "^28.2.1",
+    "electron-builder": "^24.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
   },
   "dependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/react": "^19.1.10",
+    "cron": "^4.3.3",
     "electron-sudo": "^4.0.12",
-    "systeminformation": "^5.27.7"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "shadcn-ui": "^0.9.5",
+    "systeminformation": "^5.27.7",
+    "tailwind-merge": "^3.3.1"
   }
 }

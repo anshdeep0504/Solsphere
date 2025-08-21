@@ -1,54 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Health Dashboard</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
-<style>
-  body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-  h1 { color: #333; }
-  ul { list-style-type: none; padding: 0; }
-  li { margin: 10px 0; font-size: 1.1em; }
-  span { font-weight: bold; color: #555; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Health Dashboard</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #222;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 60%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px;
+    }
+
+    th {
+      background-color: #0078d7;
+      color: #fff;
+      font-size: 1.1em;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #eef6ff;
+    }
+
+    td span {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
   <h1>System Health Dashboard</h1>
-  <ul>
-    <li>Disk Type (Proxy for Encryption): <span id="disk">Loading...</span></li>
-    <li>OS Version: <span id="os">Loading...</span></li>
-    <li>CPU: <span id="cpu">Loading...</span></li>
-    <li>RAM: <span id="ram">Loading...</span></li>
-    <li>Antivirus: <span id="av">Loading...</span></li>
-    <li>Sleep Settings: <span id="sleep">Loading...</span></li>
-  </ul>
+
+  <div class="search-container">
+    <input type="text" id="searchBox" placeholder="Search system info...">
+  </div>
+
+  <table id="systemTable">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Disk Type (Proxy for Encryption)</td><td><span id="disk">Loading...</span></td></tr>
+      <tr><td>OS Version</td><td><span id="os">Loading...</span></td></tr>
+      <tr><td>CPU</td><td><span id="cpu">Loading...</span></td></tr>
+      <tr><td>RAM</td><td><span id="ram">Loading...</span></td></tr>
+      <tr><td>Antivirus</td><td><span id="av">Loading...</span></td></tr>
+      <tr><td>Sleep Settings</td><td><span id="sleep">Loading...</span></td></tr>
+    </tbody>
+  </table>
 
   <script>
     async function loadInfo() {
-      alert('loadInfo() called');
-      console.log('loadInfo() called');
       try {
-        console.log('Before window.systemAPI.getSystemInfo()');
-        const info = await window.systemAPI.getSystemInfo();
-        console.log('After window.systemAPI.getSystemInfo()', info);
-        document.getElementById('disk').innerText = info.diskEncryption;
-        document.getElementById('os').innerText = info.osVersion;
-        document.getElementById('cpu').innerText = info.cpu;
-        document.getElementById('ram').innerText = info.ram;
-        document.getElementById('av').innerText = info.antivirus;
-        document.getElementById('sleep').innerText = info.sleep;
+        document.getElementById('os').innerText = await window.electronAPI.getOSVersion();
+        document.getElementById('cpu').innerText = await window.electronAPI.getCPU();
+        document.getElementById('ram').innerText = await window.electronAPI.getRAM();
+        document.getElementById('disk').innerText = await window.electronAPI.getDiskEncryption();
+        document.getElementById('av').innerText = await window.electronAPI.getAntivirus();
+        document.getElementById('sleep').innerText = await window.electronAPI.getSleepSettings();
       } catch (err) {
         console.error('Renderer Error:', err);
-        document.getElementById('disk').innerText = 'Unknown';
-        document.getElementById('os').innerText = 'Unknown';
-        document.getElementById('cpu').innerText = 'Unknown';
-        document.getElementById('ram').innerText = 'Unknown';
-        document.getElementById('av').innerText = 'Unknown';
-        document.getElementById('sleep').innerText = 'Unknown';
+        document.querySelectorAll("span").forEach(el => el.innerText = "Unknown");
       }
-      console.log('loadInfo() finished');
     }
+
+    // Search filter
+    document.getElementById('searchBox').addEventListener('keyup', function() {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#systemTable tbody tr');
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    });
 
     loadInfo();
   </script>
