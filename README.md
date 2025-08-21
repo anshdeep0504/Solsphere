@@ -24,7 +24,7 @@ Solsphere is a full-stack application built with Electron, designed to manage an
 1.  Clone the repository:
 
     ```bash
-    git clone <repository_url>
+    git clone https://github.com/anshdeep0504/Solsphere
     ```
 2.  Navigate to the project directory:
 
@@ -64,6 +64,4 @@ Contributions are welcome! Please follow these steps:
 3.  Make your changes and commit them with descriptive messages.
 4.  Submit a pull request.
 
-## License
 
-[Specify the license here, e.g., MIT License]
